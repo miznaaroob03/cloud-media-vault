@@ -1,10 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-const app = express();
-const PORT = process.env.PORT || 5000;
+// --- ADD THESE TWO LINES BELOW ---
+const { createClient } = require('@supabase/supabase-js');
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+// ---------------------------------
 
-app.use(cors());
-app.use(express.json());
+const app = express();
+app.use(cors()); // Make sure this is here so your frontend can talk to it
+app.use(express.json()); // This allows your server to read JSON data
+
+const PORT = process.env.PORT || 5000;
 
 // --- TASK 2: SOFT DELETE (Move to Trash) ---
 app.patch('/api/files/trash/:id', async (req, res) => {
